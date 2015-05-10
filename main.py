@@ -3,6 +3,3 @@ import view as v
 
 v.main()
 
-
-
-#def backpropagation(W1,):

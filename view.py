@@ -38,22 +38,21 @@ def main():
                     img = Image.fromstring('RGB', (350,350), data)
                     img = img.resize((30, 30), Image.ANTIALIAS)
                     pixels = img.load()
-                    matrix = []
+                    input = []
                     for i in range(img.size[0]):    # for every pixel:
-                        matrix.append([])
                         for j in range(img.size[1]):
                             r = pixels[j,i][0]
                             g = pixels[j,i][1]
                             b = pixels[j,i][2]
-                            if(((r+g+b)/3)>200):
-                                matrix[i].append(1)
+                            if(((r+g+b)/3)>230):
+                                input.append(1)
                                 pixels[j,i] = (255,255,255)
-                            elif(((r+g+b)/3)<=200):
-                                matrix[i].append(0)
+                            elif(((r+g+b)/3)<=230):
+                                input.append(0)
                                 pixels[j,i] = (0,0,0)
 
                     img.save("../imagen.png", 'PNG')
-                    net.feed_forward(matrix)
+                    net.feed_forward([input])
                 elif event.type == pygame.K_c:
                     background = pygame.Surface((350,350))
 
