@@ -5,14 +5,12 @@ from Models import neural_network as neu_net
 def cropImage(Image):
     row = Image.size[0]
     col = Image.size[1]
-    print(str(row)+"x"+str(col))
     #t=top r=right b=bottom l=left
     to = ri = bo = le = 0
     suml = 0
     sumr = 0
     flag = 0
     pixels = Image.load()
-    print(pixels[0, 0])
     #/**************************top edge***********************/
     for x in range(row):
         for y in range(col):
@@ -103,7 +101,7 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     data = pygame.image.tostring(background, 'RGB')
-                    img = Image.fromstring('RGB', (350,350), data)
+                    img = Image.fromstring('RGB', (350, 350), data)
                     img = cropImage(img)
                     #img.show()
                     #img.save("crop_image.png", 'PNG')
@@ -112,16 +110,15 @@ def main():
                     input = []
                     for i in range(img.size[0]):    # for every pixel:
                         for j in range(img.size[1]):
-                            r = pixels[j,i][0]
-                            g = pixels[j,i][1]
-                            b = pixels[j,i][2]
-                            if(((r+g+b)/3)>230):
-
+                            r = pixels[j, i][0]
+                            g = pixels[j, i][1]
+                            b = pixels[j, i][2]
+                            if(r+g+b)/3 > 230:
                                 input.append(1)
-                                pixels[j,i] = (255,255,255)
-                            elif(((r+g+b)/3)<=230):
+                                pixels[j, i] = (255, 255, 255)
+                            elif(r+g+b)/3 <= 230:
                                 input.append(0)
-                                pixels[j,i] = (0,0,0)
+                                pixels[j, i] = (0, 0, 0)
 
                     img.save("../imagen.png", 'PNG')
                     net.feed_forward([input])

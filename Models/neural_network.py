@@ -5,8 +5,8 @@ class NeuralNetwork():
 
     def __init__(self):
 
-        inputs = [[0, 0, 0, 0, 1, 1, 1, 1], [0, 0, 0, 1, 1, 1, 1, 1]]
-        self.outputs = [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.inputs = [[0, 0, 0, 0, 1, 1, 1, 1]]
+        self.outputs = [[0, 1, 0]]
         self.W1 = []
         self.W2 = []
         self.hidden_layer_neurons = 7
@@ -22,6 +22,7 @@ class NeuralNetwork():
 
     #  hidden layer
     def feed_forward(self, inputs):
+        inputs = self.inputs #parche
         for i, input in enumerate(inputs):
             self.hidden_layer.append([])
             for x in range(0, self.hidden_layer_neurons):
@@ -45,13 +46,30 @@ class NeuralNetwork():
         #print "Output: " + str(self.output_layer[0])
         self.back_propagation()
 
+#BackPropagation, possibly bugged, still on development
     def back_propagation(self):
-        delta = 0
-        #falta calcular delta, no se sabe como tratar salidas esperadas (t1)
-        #print self.output_layer
+        newW2 = self.W2[:]
+        for i, output in enumerate(self.output_layer[0]):
+            if self.outputs[0][i] == 1:
+                delta = output * (1 - output) * (self.outputs[0][i] - output)
+                for y, w2 in enumerate(newW2[i]):
+                    newW2[i][y] = w2 + self.alpha * self.hidden_layer[0][y] * delta
+                for x, l in enumerate(self.W1):
+                    #print "Hiddenresult = "+str(self.hidden_layer[0][x])
+                    #print "peso2 = "+str(self.W2[i][x])
+                    #print delta
+                    d2 = self.hidden_layer[0][x] * (1 - self.hidden_layer[0][x]) * (self.W2[i][x] * delta)
+                    #print "D"+str(x) +"= "+str(d2)
+                    #print "---------------------------"
+                    for y, w1 in enumerate(l):
+                        #print "W1"+str(x)+str(y)+"=?"
+                        self.W1[x][y] = w1 + self.alpha * self.inputs[0][y] * delta
+                        print self.W1[x][y]
+        self.W2 = newW2[:]
+        #print self.hidden_layer
 
         #print self.W2
         #print self.W1
-        for i in self.W2:
-            print i
+        #for i in self.W2:
+        #    print i
         #self.W2
