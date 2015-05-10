@@ -1,9 +1,9 @@
 import pygame.font, pygame.event, pygame.draw
 from PIL import Image
-import main as logic
+from Models import neural_network as neu_net
 def main():
     """Main method. Draw interface"""
-
+    net = neu_net.NeuralNetwork()
     global screen
     pygame.init()
     screen = pygame.display.set_mode((350, 350))
@@ -38,7 +38,6 @@ def main():
                     img = Image.fromstring('RGB', (350,350), data)
                     img = img.resize((30, 30), Image.ANTIALIAS)
                     pixels = img.load()
-                    print("0 = black / 1 = white")
                     matrix = []
                     for i in range(img.size[0]):    # for every pixel:
                         matrix.append([])
@@ -53,11 +52,10 @@ def main():
                                 matrix[i].append(0)
                                 pixels[j,i] = (0,0,0)
 
-                    img.save("C:\Users\Pablo\PycharmProjects\Progra IA\imagen.png", 'PNG')
-                    logic.feedforward(matrix)
+                    img.save("../imagen.png", 'PNG')
+                    net.feed_forward(matrix)
                 elif event.type == pygame.K_c:
                     background = pygame.Surface((350,350))
 
         screen.blit(background, (0, 0))
         pygame.display.flip()
-main()
