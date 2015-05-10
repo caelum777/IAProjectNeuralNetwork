@@ -1,6 +1,4 @@
 __author__ = 'Andres'
-
-__author__ = 'Andres'
 import numpy as np
 
 
