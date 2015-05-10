@@ -1,16 +1,20 @@
 import pygame.font, pygame.event, pygame.draw
 from PIL import Image
 from Models import neural_network as neu_net
+import os, os.path
+import glob
 
-def cropImage(Image):
-    row = Image.size[0]
-    col = Image.size[1]
+def Process_image(image):
+    row = image.size[0]
+    col = image.size[1]
+    print(str(row)+"x"+str(col))
     #t=top r=right b=bottom l=left
     to = ri = bo = le = 0
     suml = 0
     sumr = 0
     flag = 0
-    pixels = Image.load()
+    pixels = image.load()
+    print(pixels[0, 0])
     #/**************************top edge***********************/
     for x in range(row):
         for y in range(col):
@@ -66,8 +70,26 @@ def cropImage(Image):
             flag = 0
             break
     box = (to, le, bo, ri)
-    img = Image.crop(box)
-    return img
+    print(box)
+    img = image.crop(box)
+    img.save("crop_image2.png", "PNG")
+    img = img.resize((30, 30), Image.ANTIALIAS)
+    pixels = img.load()
+    list = []
+    for i in range(img.size[0]):    # for every pixel:
+        for j in range(img.size[1]):
+            r = pixels[j,i][0]
+            g = pixels[j,i][1]
+            b = pixels[j,i][2]
+            if(((r+g+b)/3)>230):
+                list.append(1)
+                pixels[j,i] = (255,255,255)
+            elif(((r+g+b)/3)<=230):
+                list.append(0)
+                pixels[j,i] = (0,0,0)
+
+    img.save("image.png", 'PNG')
+    return list
 
 def main():
     """Main method. Draw interface"""
@@ -75,6 +97,7 @@ def main():
     global screen
     pygame.init()
     screen = pygame.display.set_mode((350, 350))
+    #menu = pygame.display.set_mode((350, 500))
     pygame.display.set_caption("Handwriting recognition")
 
     background = pygame.Surface((350,350))
@@ -101,30 +124,22 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     data = pygame.image.tostring(background, 'RGB')
-                    img = Image.fromstring('RGB', (350, 350), data)
-                    img = cropImage(img)
-                    #img.show()
-                    #img.save("crop_image.png", 'PNG')
-                    img = img.resize((30, 30), Image.ANTIALIAS)
-                    pixels = img.load()
-                    input = []
-                    for i in range(img.size[0]):    # for every pixel:
-                        for j in range(img.size[1]):
-                            r = pixels[j, i][0]
-                            g = pixels[j, i][1]
-                            b = pixels[j, i][2]
-                            if(r+g+b)/3 > 230:
-                                input.append(1)
-                                pixels[j, i] = (255, 255, 255)
-                            elif(r+g+b)/3 <= 230:
-                                input.append(0)
-                                pixels[j, i] = (0, 0, 0)
-
-                    img.save("../imagen.png", 'PNG')
-                    net.feed_forward([input])
-                elif event.key == pygame.K_c:
+                    img = Image.fromstring('RGB', (350,350), data)
+                    list = Process_image(img)
+                    print(list)
+                    #net.feed_forward(list)
+                if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
+                if event.key == pygame.K_o:
+                    path = "C:\Users\Pablo\Downloads\EnglishHnd\English\Hnd\Img\Sample001"
+                    #num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
+                    files = glob.glob(path+"\*.png")
+                    num_files = len(files)
+                    for file in files:
+                        print(file.title())
+                        img = Image.open(file.title())
+                        Process_image(img)
 
         screen.blit(background, (0, 0))
         pygame.display.flip()
