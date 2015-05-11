@@ -123,18 +123,34 @@ def main():
                     data = pygame.image.tostring(background, 'RGB')
                     img = Image.fromstring('RGB', (350,350), data)
                     list = Process_image(img)
+                    #if net.W1 == []:
+                        #print("variable")
+                        #net.variable_initialization([list])
                     net.feed_forward([list])
                 if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
-                if event.key == pygame.K_o:
+                if event.key == pygame.K_t:
                     path = "C:\Users\Pablo\Downloads\EnglishHnd\English\Hnd\Img\Sample001"
                     #num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
                     files = glob.glob(path+"\*.png")
                     num_files = len(files)
+                    list_images = []
+                    print "Plis w8 loading images"
+                    i = 0
                     for file in files:
                         img = Image.open(file.title())
-                        Process_image(img)
+                        img = Process_image(img)
+                        list_images.append(img)
+                        if i == 2:
+                            break
+                        i += 1
+                    print "Loading images complete"
+                    if net.W1 == []:
+                        print("variable")
+                        net.variable_initialization(list_images)
+                    net.feed_forward(list_images)
+
 
         screen.blit(background, (0, 0))
         pygame.display.flip()
