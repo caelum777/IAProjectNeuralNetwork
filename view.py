@@ -1,6 +1,7 @@
 import pygame.font, pygame.event, pygame.draw
 from PIL import Image
 from Models import neural_network as neu_net
+import pickle as pck
 import os, os.path
 import glob
 
@@ -53,6 +54,10 @@ def Process_image(image):
         if(flag==1):
             flag = 0
             break
+
+
+
+
 
     #/**********************right edge***********************************/
     for y in range(col-1, 0, -1):
@@ -131,23 +136,33 @@ def main():
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
-                    path = "C:\Users\Proyecto\Downloads\English\Hnd\Img\Sample0"
+                    path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
                     #  num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
                     #  num_files = len(files)
+                    all_images =[]
                     list_images = []
                     print "Plis w8 loading images"
-                    i = 0
+
                     for x in range(1, 37):
-                        path = "C:\Users\Proyecto\Downloads\English\Hnd\Img\Sample0"
+                        list_images =[]
+                        path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
                         path += str(x)
                         files = glob.glob(path+"\*.png")
                         print x-1
                         net.outputs[0][x-1] = 1
+
                         for file in files:
                             img = Image.open(file.title())
                             img = Process_image(img)
                             list_images.append(img)
+
+                        all_images.append(list_images[:])
                         net.outputs[0][x-1] = 0
+
+                #print "All images: " + str(all_images)
+                    save_list(all_images, "..\.imgs")
+                    #lista = read_list("..\.imgs")
+                    #print lista, "read"
                     print "Loading images complete"
                     """if net.W1 == []:
                         net.variable_initialization(list_images)
@@ -156,7 +171,19 @@ def main():
                         for ele in list_images:
                             net.feed_forward([ele])
                         net.outputs[i] = 0"""
-
-
         screen.blit(background, (0, 0))
         pygame.display.flip()
+
+def save_list(itemlist, outfile):
+    with open(outfile, 'w') as f:
+        pck.dump(itemlist, f)
+
+def read_list(infile):
+
+    with open(infile, 'r') as f:
+        item_list = pck.load(f)
+    return item_list
+
+
+
+
