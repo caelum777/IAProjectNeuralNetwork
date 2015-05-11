@@ -123,10 +123,10 @@ def main():
                     data = pygame.image.tostring(background, 'RGB')
                     img = Image.fromstring('RGB', (350,350), data)
                     list = Process_image(img)
-                    #if net.W1 == []:
+                    if net.W1 == []:
                         #print("variable")
-                        #net.variable_initialization([list])
-                    net.feed_forward([list])
+                        net.variable_initialization([list])
+                    net.feed_forward(list)
                 if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
@@ -136,18 +136,17 @@ def main():
                     #  num_files = len(files)
                     list_images = []
                     print "Plis w8 loading images"
-                    i = 0
                     for x in range(1, 37):
                         path = "C:\Users\Proyecto\Downloads\English\Hnd\Img\Sample0"
                         path += str(x)
                         files = glob.glob(path+"\*.png")
                         print x-1
-                        net.outputs[0][x-1] = 1
+                        net.outputs[x-1] = 1
                         for file in files:
                             img = Image.open(file.title())
                             img = Process_image(img)
                             list_images.append(img)
-                        net.outputs[0][x-1] = 0
+                        net.outputs[x-1] = 0
                     print "Loading images complete"
                     """if net.W1 == []:
                         net.variable_initialization(list_images)
