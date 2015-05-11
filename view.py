@@ -131,25 +131,31 @@ def main():
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
-                    path = "C:\Users\Pablo\Downloads\EnglishHnd\English\Hnd\Img\Sample001"
-                    #num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
-                    files = glob.glob(path+"\*.png")
-                    num_files = len(files)
+                    path = "C:\Users\Proyecto\Downloads\English\Hnd\Img\Sample0"
+                    #  num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
+                    #  num_files = len(files)
                     list_images = []
                     print "Plis w8 loading images"
                     i = 0
-                    for file in files:
-                        img = Image.open(file.title())
-                        img = Process_image(img)
-                        list_images.append(img)
-                        if i == 2:
-                            break
-                        i += 1
+                    for x in range(1, 37):
+                        path = "C:\Users\Proyecto\Downloads\English\Hnd\Img\Sample0"
+                        path += str(x)
+                        files = glob.glob(path+"\*.png")
+                        print x-1
+                        net.outputs[0][x-1] = 1
+                        for file in files:
+                            img = Image.open(file.title())
+                            img = Process_image(img)
+                            list_images.append(img)
+                        net.outputs[0][x-1] = 0
                     print "Loading images complete"
-                    if net.W1 == []:
-                        print("variable")
+                    """if net.W1 == []:
                         net.variable_initialization(list_images)
-                    net.feed_forward(list_images)
+                    for i in len(net.outputs[0]):
+                        net.outputs[i] = 1
+                        for ele in list_images:
+                            net.feed_forward([ele])
+                        net.outputs[i] = 0"""
 
 
         screen.blit(background, (0, 0))
