@@ -7,14 +7,12 @@ import glob
 def Process_image(image):
     row = image.size[0]
     col = image.size[1]
-    print(str(row)+"x"+str(col))
     #t=top r=right b=bottom l=left
     to = ri = bo = le = 0
     suml = 0
     sumr = 0
     flag = 0
     pixels = image.load()
-    print(pixels[0, 0])
     #/**************************top edge***********************/
     for x in range(row):
         for y in range(col):
@@ -70,9 +68,8 @@ def Process_image(image):
             flag = 0
             break
     box = (to, le, bo, ri)
-    print(box)
     img = image.crop(box)
-    img.save("crop_image2.png", "PNG")
+    #img.save("crop_image2.png", "PNG")
     img = img.resize((30, 30), Image.ANTIALIAS)
     pixels = img.load()
     list = []
@@ -88,7 +85,7 @@ def Process_image(image):
                 list.append(0)
                 pixels[j,i] = (0,0,0)
 
-    img.save("image.png", 'PNG')
+    #img.save("image.png", 'PNG')
     return list
 
 def main():
@@ -126,8 +123,7 @@ def main():
                     data = pygame.image.tostring(background, 'RGB')
                     img = Image.fromstring('RGB', (350,350), data)
                     list = Process_image(img)
-                    print(list)
-                    #net.feed_forward(list)
+                    net.feed_forward([list])
                 if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
@@ -137,7 +133,6 @@ def main():
                     files = glob.glob(path+"\*.png")
                     num_files = len(files)
                     for file in files:
-                        print(file.title())
                         img = Image.open(file.title())
                         Process_image(img)
 

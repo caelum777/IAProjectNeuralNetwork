@@ -4,7 +4,6 @@ import numpy as np
 class NeuralNetwork():
 
     def __init__(self):
-
         self.inputs = [[0, 0, 0, 0, 1, 1, 1, 1]]
         self.outputs = [[0, 1, 0]]
         self.W1 = []
@@ -13,9 +12,7 @@ class NeuralNetwork():
         self.output_layer_neurons = 3
         self.hidden_layer = []
         self.output_layer = []
-        self.alpha = 0.025
-
-
+        self.alpha = 0.4
 
     def sigmoid(self, z):
         return 1.0/(1.0+np.exp(-z))
@@ -54,6 +51,7 @@ class NeuralNetwork():
                 delta = output * (1 - output) * (self.outputs[0][i] - output)
                 for y, w2 in enumerate(newW2[i]):
                     newW2[i][y] = w2 + self.alpha * self.hidden_layer[0][y] * delta
+                #print self.W1
                 for x, l in enumerate(self.W1):
                     #print "Hiddenresult = "+str(self.hidden_layer[0][x])
                     #print "peso2 = "+str(self.W2[i][x])
@@ -64,8 +62,8 @@ class NeuralNetwork():
                     for y, w1 in enumerate(l):
                         #print "W1"+str(x)+str(y)+"=?"
                         self.W1[x][y] = w1 + self.alpha * self.inputs[0][y] * delta
-                        print self.W1[x][y]
         self.W2 = newW2[:]
+        #print self.W1
         #print self.hidden_layer
 
         #print self.W2
