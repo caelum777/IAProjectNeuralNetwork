@@ -90,6 +90,7 @@ def Process_image(image):
 def main():
     """Main method. Draw interface"""
     net = neu_net.NeuralNetwork()
+    list1 = read_list("C:\Users\Pablo\PycharmProjects\IAProjectNeuralNetwork\Images\.imgs")
     global screen
     pygame.init()
     screen = pygame.display.set_mode((350, 350))
@@ -124,10 +125,10 @@ def main():
                     img = Image.fromstring('RGB', (350,350), data)
                     list = Process_image(img)
                     if net.W1 == []:
-                        net.variable_initialization([list])
-                    net.feed_forward(list)
-                    save_list(net.W1, "..\w1")
-                    save_list(net.W1, "..\w2")
+                        net.variable_initialization(list)
+                    net.feed_forward(list, False)
+                    #save_list(net.W1, "..\w1")
+                    #save_list(net.W1, "..\w2")
                 if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
@@ -135,21 +136,22 @@ def main():
                     path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
                     #  num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
                     #  num_files = len(files)
-                    list = read_list("C:\Users\Proyecto\Documents\IAProjectNeuralNetwork\Images\.imgs")
                     #  print "Starting..."
                     for iteration in range(0, 100):
-                        print iteration, " number"
-                        for i in range(len(list)):
+                        for i in range(len(list1)):
                             net.outputs[i] = 1
                             #print "Image training: ", i
-                            for j in range(len(list[i])):
+                            for j in range(len(list1[i])):
                                 if net.W1 == []:
-                                    net.variable_initialization(list)
-                                    #print "First net: ", net.W2[0]
-                                net.feed_forward(list[i][j])
+                                    net.variable_initialization(list1[i][j])
+                                    #print len(net.W1) = 624
+                                    #print len(net.W1[0]) = 900
+                                net.feed_forward(list1[i][j], True)
                             net.outputs[i] = 0
+                            break
                         break
-                        print net.W2[0][0:6]
+                    print "Training done."
+                        #print net.W2[0][0:6]
                     #print "Second net: ", net.W2[0]
                     """print "Plis w8 loading images"
                     for x in range(1, 37):
