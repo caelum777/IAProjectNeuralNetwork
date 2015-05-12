@@ -24,7 +24,7 @@ class NeuralNetwork():
         self.output_layer_neurons = 36
         self.hidden_layer = []
         self.output_layer = []
-        self.alpha = 0.4
+        self.alpha = 0.6
 
     def calculate_results(self):
         greater = 0

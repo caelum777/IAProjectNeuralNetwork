@@ -2,7 +2,7 @@ import pygame.font, pygame.event, pygame.draw
 from PIL import Image
 from Models import neural_network as neu_net
 import pickle as pck
-import os, os.path
+from os.path import abspath, exists
 import glob
 
 def Process_image(image):
@@ -111,7 +111,7 @@ def main():
     keepGoing = True
     lineStart = (0, 0)
     drawColor = (0, 0, 0)
-    lineWidth = 40
+    lineWidth = 22
     pygame.display.update()
 
     while keepGoing:
@@ -124,7 +124,9 @@ def main():
 
                 lineEnd = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed() == (1, 0, 0):
-                    pygame.draw.line(background, drawColor, lineStart, lineEnd, lineWidth)
+                    #pygame.draw.line(background, drawColor, lineStart, lineEnd, lineWidth)
+                    pygame.draw.circle(background, drawColor, lineStart, lineWidth, 0)
+
                 lineStart = lineEnd
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
@@ -186,11 +188,16 @@ def main():
         pygame.display.flip()
 
 def save_list(itemlist, outfile):
+    f_path = abspath(outfile)
+
     with open(outfile, 'w') as f:
+        print f_path
         pck.dump(itemlist, f)
 
 def read_list(infile):
+    #f_path = abspath(infile)
     with open(infile, 'r') as f:
+        #print f_path
         item_list = pck.load(f)
     return item_list
 
