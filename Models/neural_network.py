@@ -71,7 +71,7 @@ class NeuralNetwork():
     def back_propagation(self):
         nw2 = self.W2[:]
         for i, output in enumerate(self.output_layer):
-            if self.outputs[i] == 1 and output < 0.6:
+            if self.outputs[i] == 1 and output < 0.8:
                 delta = output * (1 - output) * (self.outputs[i] - output)
                 for y, w2 in enumerate(nw2[i]):
                     nw2[i][y] = w2 + self.alpha * self.hidden_layer[y] * delta
