@@ -90,7 +90,14 @@ def Process_image(image):
 def main():
     """Main method. Draw interface"""
     net = neu_net.NeuralNetwork()
-    list1 = read_list("C:\Users\Pablo\PycharmProjects\IAProjectNeuralNetwork\Images\.imgs")
+    try:
+        net.W1 = read_list("Weights\W1.w")
+        net.W2 = read_list("Weights\W2.w")
+    except:
+        net.variable_initialization()
+        save_list(net.W1, "Weights\W1.w")
+        save_list(net.W2, "Weights\W2.w")
+    list1 = read_list("Images\.imgs")
     global screen
     pygame.init()
     screen = pygame.display.set_mode((350, 350))
@@ -124,8 +131,6 @@ def main():
                     data = pygame.image.tostring(background, 'RGB')
                     img = Image.fromstring('RGB', (350,350), data)
                     list = Process_image(img)
-                    if net.W1 == []:
-                        net.variable_initialization(list)
                     net.feed_forward(list, False)
                     #save_list(net.W1, "..\w1")
                     #save_list(net.W1, "..\w2")
@@ -133,24 +138,17 @@ def main():
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
-                    path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
-                    #  num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
-                    #  num_files = len(files)
-                    #  print "Starting..."
-                    for iteration in range(0, 100):
+                    for iteration in range(0, 3):
                         for i in range(len(list1)):
                             net.outputs[i] = 1
-                            #print "Image training: ", i
+                            print "Image training: %s" %net.results[i]
                             for j in range(len(list1[i])):
-                                if net.W1 == []:
-                                    net.variable_initialization(list1[i][j])
-                                    #print len(net.W1) = 624
-                                    #print len(net.W1[0]) = 900
                                 net.feed_forward(list1[i][j], True)
                             net.outputs[i] = 0
-                            break
-                        break
+                        print "Iteration #%s complete..." %iteration
                     print "Training done."
+                    save_list(net.W1, "Weights\W1.w")
+                    save_list(net.W2, "Weights\W2.w")
                         #print net.W2[0][0:6]
                     #print "Second net: ", net.W2[0]
                     """print "Plis w8 loading images"
@@ -192,7 +190,6 @@ def save_list(itemlist, outfile):
         pck.dump(itemlist, f)
 
 def read_list(infile):
-
     with open(infile, 'r') as f:
         item_list = pck.load(f)
     return item_list
