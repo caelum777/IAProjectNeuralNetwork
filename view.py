@@ -10,11 +10,9 @@ def Process_image(image):
     col = image.size[1]
     #t=top r=right b=bottom l=left
     to = ri = bo = le = 0
-    suml = 0
-    sumr = 0
     flag = 0
     pixels = image.load()
-    #/**************************top edge***********************/
+    #/top edge/
     for x in range(row):
         for y in range(col):
             r = pixels[x, y][0]
@@ -27,7 +25,7 @@ def Process_image(image):
         if(flag==1):
             flag = 0
             break
-    #/*******************bottom edge***********************************/
+    #/bottom edge/
     for x in range(row-1, 0, -1):
         for y in range(col):
             r = pixels[x, y][0]
@@ -40,7 +38,7 @@ def Process_image(image):
         if(flag==1):
             flag = 0
             break
-    #/*************************left edge*******************************/
+    #/left edge/
 
     for y in range(col):
         for x in range(row):
@@ -55,11 +53,7 @@ def Process_image(image):
             flag = 0
             break
 
-
-
-
-
-    #/**********************right edge***********************************/
+    #/right edge/
     for y in range(col-1, 0, -1):
         for x in range(row):
             r = pixels[x, y][0]
@@ -109,7 +103,7 @@ def main():
     keepGoing = True
     lineStart = (0, 0)
     drawColor = (0, 0, 0)
-    lineWidth = 5
+    lineWidth = 40
     pygame.display.update()
 
     while keepGoing:
@@ -119,6 +113,7 @@ def main():
             if event.type == pygame.QUIT:
                 keepGoing = False
             elif event.type == pygame.MOUSEMOTION:
+
                 lineEnd = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed() == (1, 0, 0):
                     pygame.draw.line(background, drawColor, lineStart, lineEnd, lineWidth)
@@ -129,9 +124,10 @@ def main():
                     img = Image.fromstring('RGB', (350,350), data)
                     list = Process_image(img)
                     if net.W1 == []:
-                        #print("variable")
                         net.variable_initialization([list])
                     net.feed_forward(list)
+                    save_list(net.W1, "..\w1")
+                    save_list(net.W1, "..\w2")
                 if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
@@ -139,9 +135,23 @@ def main():
                     path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
                     #  num_files = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
                     #  num_files = len(files)
-                    all_images =[]
-                    list_images = []
-                    print "Plis w8 loading images"
+                    list = read_list("C:\Users\Proyecto\Documents\IAProjectNeuralNetwork\Images\.imgs")
+                    #  print "Starting..."
+                    for iteration in range(0, 100):
+                        print iteration, " number"
+                        for i in range(len(list)):
+                            net.outputs[i] = 1
+                            #print "Image training: ", i
+                            for j in range(len(list[i])):
+                                if net.W1 == []:
+                                    net.variable_initialization(list)
+                                    #print "First net: ", net.W2[0]
+                                net.feed_forward(list[i][j])
+                            net.outputs[i] = 0
+                        break
+                        print net.W2[0][0:6]
+                    #print "Second net: ", net.W2[0]
+                    """print "Plis w8 loading images"
                     for x in range(1, 37):
                         list_images =[]
                         path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
@@ -159,17 +169,18 @@ def main():
                         net.outputs[0][x-1] = 0
 
                     #print "All images: " + str(all_images)
-                    save_list(all_images, "..\.imgs")
+                    #save_list(all_images, "..\.imgs")
                     #lista = read_list("..\.imgs")
                     #print lista, "read"
                     #net.outputs[x-1] = 0
                     print "Loading images complete"
-                    """if net.W1 == []:
+                    if net.W1 == []:
                         net.variable_initialization(list_images)
                     for i in len(net.outputs[0]):
                         net.outputs[i] = 1
                         for ele in list_images:
                             net.feed_forward([ele])
+
                         net.outputs[i] = 0"""
         screen.blit(background, (0, 0))
         pygame.display.flip()

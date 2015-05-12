@@ -36,7 +36,8 @@ class NeuralNetwork():
 
     #    hidden layer
     def feed_forward(self, input):
-        print "Plz w8 iniciando feedfoward"
+        self.hidden_layer = []
+        self.output_layer = []
         #  inputs = self.inputs #  parche
         self.hidden_layer.append([])
         for x in range(0, self.hidden_layer_neurons):
@@ -62,16 +63,14 @@ class NeuralNetwork():
         self.inputs = input
         self.back_propagation()
         #print "res: ", self.W2
-        print self.output_layer
-        self.hidden_layer = []
-        self.output_layer = []
+
 
 #  BackPropagation, possibly bugged, still on development
     def back_propagation(self):
-        print "Plz w8 inicializando backpropagation"
         newW2 = self.W2[:]
         for i, output in enumerate(self.output_layer):
-            if self.outputs[i] == 1:
+            #print "output: ", output
+            if self.outputs[i] == 1 and output < 0.6:
                 delta = output * (1 - output) * (self.outputs[i] - output)
                 for y, w2 in enumerate(newW2[i]):
                     newW2[i][y] = w2 + self.alpha * self.hidden_layer[0][y] * delta
@@ -87,7 +86,8 @@ class NeuralNetwork():
                         #  print "W1"+str(x)+str(y)+"=?"
                         #  print self.W1[x][y]
                         #  print self.inputs[0][y]
-                        self.W1[x][y] = w1 + self.alpha * self.inputs[y] * delta
+                        self.W1[x][y] = w1 + self.alpha * self.inputs[y] * d2
+        #  print "Such a wow ", newW2[self.outputs.index(1)][self.outputs.index(1)]
         self.W2 = newW2[:]
         #  print self.W1
         #  print self.W2
