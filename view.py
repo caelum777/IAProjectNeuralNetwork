@@ -68,8 +68,9 @@ def Process_image(image):
             break
     box = (to, le, bo, ri)
     img = image.crop(box)
-    #img.save("crop_image2.png", "PNG")
-    img = img.resize((30, 30), Image.ANTIALIAS)
+    img.save("crop_image2.png", "PNG")
+    img = img.resize((15, 15), Image.ANTIALIAS)
+    img.save("resize_image2.png", "PNG")
     pixels = img.load()
     list = []
     for i in range(img.size[0]):    # for every pixel:
@@ -140,6 +141,7 @@ def main():
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
+                    #crop_resize(net)
                     for iteration in range(0, 5):
                         for i in range(len(list1)):
                             net.outputs[i] = 1
@@ -151,6 +153,8 @@ def main():
                     print "Training done."
                     save_list(net.W1, "Weights\W1.w")
                     save_list(net.W2, "Weights\W2.w")
+
+
                         #print net.W2[0][0:6]
                     #print "Second net: ", net.W2[0]
                     """print "Plis w8 loading images"
@@ -187,11 +191,39 @@ def main():
         screen.blit(background, (0, 0))
         pygame.display.flip()
 
+
+def crop_resize(net):
+    print "Plis w8 loading images"
+    all_images =[]
+    for x in range(1, 37):
+        list_images =[]
+        path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
+        path += str(x)
+        files = glob.glob(path+"\*.png")
+        print x-1
+        for file in files:
+            img = Image.open(file.title())
+            img = Process_image(img)
+            list_images.append(img)
+        all_images.append(list_images[:])
+    print "All images: " + str(all_images)
+    save_list(all_images, "Images\.imgs15x15")
+    #lista = read_list("..\.imgs")
+    #print lista, "read"
+    print "Loading images complete"
+
+
+
+
+
+
+
+
 def save_list(itemlist, outfile):
-    f_path = abspath(outfile)
+    #f_path = abspath(outfile)
 
     with open(outfile, 'w') as f:
-        print f_path
+        #print f_path
         pck.dump(itemlist, f)
 
 def read_list(infile):
