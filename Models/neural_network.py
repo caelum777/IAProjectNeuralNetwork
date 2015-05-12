@@ -19,8 +19,8 @@ class NeuralNetwork():
                         "U", "V", "W", "X", "Y", "Z"]
         self.W1 = []
         self.W2 = []
-        self.inputs_layer_neurons = 900
-        self.hidden_layer_neurons = 624
+        self.inputs_layer_neurons = 225
+        self.hidden_layer_neurons = 174
         self.output_layer_neurons = 36
         self.hidden_layer = []
         self.output_layer = []
