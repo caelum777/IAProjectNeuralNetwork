@@ -138,7 +138,7 @@ def main():
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
-                    for iteration in range(0, 3):
+                    for iteration in range(0, 5):
                         for i in range(len(list1)):
                             net.outputs[i] = 1
                             print "Image training: %s" %net.results[i]
