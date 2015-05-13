@@ -98,7 +98,7 @@ def main():
         net.variable_initialization()
         save_list(net.W1, "Weights\W1.w")
         save_list(net.W2, "Weights\W2.w")
-    list1 = read_list("Images\.imgs")
+    list1 = read_list("Images\.imgs15x15")
     global screen
     pygame.init()
     screen = pygame.display.set_mode((350, 350))
@@ -142,7 +142,7 @@ def main():
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
                     #crop_resize(net)
-                    for iteration in range(0, 5):
+                    for iteration in range(0, 60):
                         for i in range(len(list1)):
                             net.outputs[i] = 1
                             print "Image training: %s" %net.results[i]

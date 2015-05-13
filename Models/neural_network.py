@@ -28,11 +28,14 @@ class NeuralNetwork():
 
     def calculate_results(self):
         greater = 0
+        listindex = []
         index = 0
         for i, val in enumerate(self.output_layer):
             if val > greater:
                 greater = val
+                listindex.append(i)
                 index = i
+
         return self.results[index]
 
     #  Jonathan: Made some changes, somethings weren't necessary.
@@ -64,6 +67,7 @@ class NeuralNetwork():
         if Tphase:
             self.back_propagation()
         else:
+            print self.output_layer
             print "show result: ", self.calculate_results()
 
 
