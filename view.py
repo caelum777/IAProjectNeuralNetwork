@@ -5,6 +5,8 @@ import pickle as pck
 from os.path import abspath, exists
 import glob
 
+
+
 def Process_image(image):
     row = image.size[0]
     col = image.size[1]
@@ -68,25 +70,26 @@ def Process_image(image):
             break
     box = (to, le, bo, ri)
     img = image.crop(box)
-    img.save("crop_image2.png", "PNG")
-    img = img.resize((15, 15), Image.ANTIALIAS)
-    img.save("resize_image2.png", "PNG")
+    #img.save("crop_image2.png", "PNG")
+    img = img.resize((5, 5), Image.ANTIALIAS)
+    #img.save("resize_image2.png", "PNG")
     pixels = img.load()
     list = []
     for i in range(img.size[0]):    # for every pixel:
         for j in range(img.size[1]):
-            r = pixels[j,i][0]
-            g = pixels[j,i][1]
-            b = pixels[j,i][2]
-            if(((r+g+b)/3)>230):
+            r = pixels[j, i][0]
+            g = pixels[j, i][1]
+            b = pixels[j, i][2]
+            if(((r+g+b)/3)>200):
                 list.append(1)
                 pixels[j,i] = (255,255,255)
-            elif(((r+g+b)/3)<=230):
+            elif(((r+g+b)/3)<=200):
                 list.append(0)
                 pixels[j,i] = (0,0,0)
 
-    #img.save("image.png", 'PNG')
+    img.save("image.png", 'PNG')
     return list
+
 
 def main():
     """Main method. Draw interface"""
@@ -98,11 +101,11 @@ def main():
         net.variable_initialization()
         save_list(net.W1, "Weights\W1.w")
         save_list(net.W2, "Weights\W2.w")
-    list1 = read_list("Images\.imgs15x15")
+    list1 = read_list("Images\.imgs5x5")
     global screen
     pygame.init()
     screen = pygame.display.set_mode((350, 350))
-    #menu = pygame.display.set_mode((350, 500))
+    #  menu = pygame.display.set_mode((350, 500))
     pygame.display.set_caption("Handwriting recognition")
 
     background = pygame.Surface((350,350))
@@ -116,13 +119,11 @@ def main():
     pygame.display.update()
 
     while keepGoing:
-
         clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 keepGoing = False
             elif event.type == pygame.MOUSEMOTION:
-
                 lineEnd = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed() == (1, 0, 0):
                     #pygame.draw.line(background, drawColor, lineStart, lineEnd, lineWidth)
@@ -142,7 +143,7 @@ def main():
                     background.fill((255, 255, 255))
                 if event.key == pygame.K_t:
                     #crop_resize(net)
-                    for iteration in range(0, 60):
+                    for iteration in range(0, 100000000):
                         for i in range(len(list1)):
                             net.outputs[i] = 1
                             print "Image training: %s" %net.results[i]
@@ -153,7 +154,8 @@ def main():
                     print "Training done."
                     save_list(net.W1, "Weights\W1.w")
                     save_list(net.W2, "Weights\W2.w")
-
+                if event.key == pygame.K_p:
+                    read_5x5_images()
 
                         #print net.W2[0][0:6]
                     #print "Second net: ", net.W2[0]
@@ -197,7 +199,7 @@ def crop_resize(net):
     all_images =[]
     for x in range(1, 37):
         list_images =[]
-        path = "E:\Users\Lesmed\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
+        path = "C:\Users\Pablo\Downloads\EnglishHnd\English\Hnd\Img\Sample0"
         path += str(x)
         files = glob.glob(path+"\*.png")
         print x-1
@@ -207,7 +209,7 @@ def crop_resize(net):
             list_images.append(img)
         all_images.append(list_images[:])
     print "All images: " + str(all_images)
-    save_list(all_images, "Images\.imgs15x15")
+    save_list(all_images, "Images\.imgs5x5")
     #lista = read_list("..\.imgs")
     #print lista, "read"
     print "Loading images complete"
@@ -215,6 +217,31 @@ def crop_resize(net):
 
 
 
+def read_5x5_images():
+    all_images =[]
+    path = "C:\Users\Pablo\Pictures\Training set 5x5"
+    files = glob.glob(path+"\*.png")
+    list_images = []
+    for file in files:
+        img = Image.open(file.title())
+        pixels = img.load()
+        list = []
+        for i in range(img.size[0]):    # for every pixel:
+            for j in range(img.size[1]):
+                r = pixels[j, i][0]
+                g = pixels[j, i][1]
+                b = pixels[j, i][2]
+                if(((r+g+b)/3)>200):
+                    list.append(1)
+                    pixels[j,i] = (255,255,255)
+                elif(((r+g+b)/3)<=200):
+                    list.append(0)
+                    pixels[j,i] = (0,0,0)
+        img.save("image.png", 'PNG')
+        list_images.append([list])
+    #all_images.append(list_images[:])
+    print "All images: " + str(list_images)
+    save_list(all_images, "Images\.imgs5x5")
 
 
 

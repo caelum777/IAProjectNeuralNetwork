@@ -5,7 +5,7 @@ class NeuralNetwork():
 
     def __init__(self):
         self.inputs = []
-        self.outputs = [0, 0, 0, 0, 0, 0,
+        """self.outputs = [0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
@@ -16,15 +16,19 @@ class NeuralNetwork():
                         "C", "D", "E", "F", "G", "H",
                         "I", "J", "K", "L", "M", "N",
                         "O", "P", "Q", "R", "S", "T",
-                        "U", "V", "W", "X", "Y", "Z"]
+                        "U", "V", "W", "X", "Y", "Z"]"""
+        #  Parche: Test de 5x5 con 10 salidas
+        self.outputs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.results = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
         self.W1 = []
         self.W2 = []
-        self.inputs_layer_neurons = 225
-        self.hidden_layer_neurons = 174
-        self.output_layer_neurons = 36
+        self.inputs_layer_neurons = 25
+        self.hidden_layer_neurons = 23
+        self.output_layer_neurons = 10
         self.hidden_layer = []
         self.output_layer = []
-        self.alpha = 0.6
+        self.alpha = 0.8
 
     def calculate_results(self):
         greater = 0
@@ -75,7 +79,7 @@ class NeuralNetwork():
     def back_propagation(self):
         nw2 = self.W2[:]
         for i, output in enumerate(self.output_layer):
-            if self.outputs[i] == 1 and output < 0.8:
+            if output < 0.8:
                 delta = output * (1 - output) * (self.outputs[i] - output)
                 for y, w2 in enumerate(nw2[i]):
                     nw2[i][y] = w2 + self.alpha * self.hidden_layer[y] * delta
