@@ -26,6 +26,7 @@ class NeuralNetwork():
         self.hidden_layer = []
         self.output_layer = []
         self.alpha = 0.25
+        self.unbalanced = True
 
     def calculate_results(self):
         greater = 0
@@ -75,6 +76,7 @@ class NeuralNetwork():
         nw2 = self.W2[:]
         for i, output in enumerate(self.output_layer):
             if (self.outputs[i] == 1 and output < 0.9) or (self.outputs[i] == 0 and output > 0.1):
+                self.unbalanced = True
                 delta = output * (1 - output) * (self.outputs[i] - output)
                 for y, w2 in enumerate(nw2[i]):
                     nw2[i][y] = w2 + self.alpha * self.hidden_layer[y] * delta

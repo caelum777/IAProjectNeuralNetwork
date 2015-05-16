@@ -159,15 +159,14 @@ def main():
                     background2.fill((255, 255, 255))
                     screen.blit(background2, (360, 0))
                 if event.key == pygame.K_t:
-                    for iteration in range(0, 1000):
+                    while net.unbalanced:
+                        net.unbalanced = False
                         for i in range(len(list1)):
                             net.outputs[i] = 1
-                            print "Image training: %s" %net.results[i]
                             for j in range(len(list1[i])):
                                 net.feed_forward(list1[i][j], True)
                             net.outputs[i] = 0
-                        #print "Iteration #%s complete..." %iteration
-                    #print "Training done."
+                    print "Training done."
                     save_list(net.W1, "Weights\W1.w")
                     save_list(net.W2, "Weights\W2.w")
                 if event.key == pygame.K_p:
