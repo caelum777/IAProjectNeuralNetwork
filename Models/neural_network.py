@@ -5,7 +5,7 @@ class NeuralNetwork():
 
     def __init__(self):
         self.inputs = []
-        """self.outputs = [0, 0, 0, 0, 0, 0,
+        self.outputs = [0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
@@ -16,31 +16,30 @@ class NeuralNetwork():
                         "C", "D", "E", "F", "G", "H",
                         "I", "J", "K", "L", "M", "N",
                         "O", "P", "Q", "R", "S", "T",
-                        "U", "V", "W", "X", "Y", "Z"]"""
-        #  Parche: Test de 5x5 con 10 salidas
-        self.outputs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.results = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+                        "U", "V", "W", "X", "Y", "Z"]
 
         self.W1 = []
         self.W2 = []
         self.inputs_layer_neurons = 25
-        self.hidden_layer_neurons = 23
-        self.output_layer_neurons = 10
+        self.hidden_layer_neurons = 41
+        self.output_layer_neurons = 36
         self.hidden_layer = []
         self.output_layer = []
-        self.alpha = 0.8
+        self.alpha = 0.25
 
     def calculate_results(self):
         greater = 0
-        listindex = []
+        greater2 = 0
         index = 0
+        index2 = 0
         for i, val in enumerate(self.output_layer):
             if val > greater:
+                greater2 = greater
+                index2 = index
                 greater = val
-                listindex.append(i)
                 index = i
 
-        return self.results[index]
+        return self.results[index], self.results[index2]
 
     #  Jonathan: Made some changes, somethings weren't necessary.
     def variable_initialization(self):
@@ -59,8 +58,8 @@ class NeuralNetwork():
         for x in range(0, self.hidden_layer_neurons):
             hidden_input = 0
             for y in range(0, len(input)):
-                hidden_input += self.W1[x][y] * input[y]#hidden_input += self.W1[x][0] * input[0]
-            self.hidden_layer.append(self.sigmoid(hidden_input))#self.hidden_layer[0].append(self.sigmoid(hidden_input))
+                hidden_input += self.W1[x][y] * input[y]
+            self.hidden_layer.append(self.sigmoid(hidden_input))
         #    output layer
         for x in range(0, self.output_layer_neurons):
             output_layer_input = 0
@@ -71,15 +70,15 @@ class NeuralNetwork():
         if Tphase:
             self.back_propagation()
         else:
-            print self.output_layer
-            print "show result: ", self.calculate_results()
+            a, b = self.calculate_results()
+            print "Primero: ", a, "Segundo: ", b
 
 
 #  BackPropagation, IT WORKS, I guess
     def back_propagation(self):
         nw2 = self.W2[:]
         for i, output in enumerate(self.output_layer):
-            if output < 0.8:
+            if (self.outputs[i] == 1 and output < 0.9) or (self.outputs[i] == 0 and output > 0.1):
                 delta = output * (1 - output) * (self.outputs[i] - output)
                 for y, w2 in enumerate(nw2[i]):
                     nw2[i][y] = w2 + self.alpha * self.hidden_layer[y] * delta
