@@ -104,11 +104,18 @@ def main():
     list1 = read_list("Images\.imgs5x5")
     global screen
     pygame.init()
-    screen = pygame.display.set_mode((350, 350))
+    screen = pygame.display.set_mode((710, 550))
     pygame.display.set_caption("Handwriting recognition")
 
-    background = pygame.Surface((350,350))
+    background = pygame.Surface((350, 350))
     background.fill((255, 255, 255))
+    background2 = pygame.Surface((350, 350))
+    background2.fill((255, 255, 255))
+    screen.blit(background2, (360, 0))
+    pygame.draw.rect(screen, (255, 255, 255), (0, 360, 710, 90))
+    pygame.draw.rect(screen, (255, 255, 255), (0, 460, 710, 80))
+    conFont = pygame.font.SysFont("Verdana", 14)
+    screen.blit(conFont.render("Controles: T\Entrenar A\Predecir C\Limpiar Pantalla Click Derecho\Dibujar Click Izquierdo\Borrar", 1, (0, 0, 0)), (4, 485))
 
     clock = pygame.time.Clock()
     keepGoing = True
@@ -126,17 +133,31 @@ def main():
                 lineEnd = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed() == (1, 0, 0):
                     pygame.draw.circle(background, drawColor, lineStart, lineWidth, 0)
+                if pygame.mouse.get_pressed() == (0, 0, 1):
+                    pygame.draw.circle(background, (255, 255, 255), lineStart, lineWidth, 0)
 
                 lineStart = lineEnd
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     data = pygame.image.tostring(background, 'RGB')
-                    img = Image.fromstring('RGB', (350,350), data)
+                    img = Image.fromstring('RGB', (350, 350), data)
                     list = Process_image(img)
                     net.feed_forward(list, False)
+                    background2 = pygame.image.load("image.png").convert()
+                    background2 = pygame.transform.scale(background2, (350, 350))
+                    screen.blit(background2, (360, 0))
+                    r, p = net.calculate_results()
+                    #myFont = pygame.font.SysFont("Verdana", 24)
+                    pygame.draw.rect(screen, (255, 255, 255), (0, 360, 710, 90))
+                    myFont = pygame.font.SysFont("Verdana", 24)
+                    screen.blit(myFont.render("Letra: %s" % r, 1, (0, 0, 0)), (290, 380))
+                    screen.blit(myFont.render("Accuracy: %s" % str(round(p, 4))+"%", 1, (0, 0, 0)), (200, 410))
                 if event.key == pygame.K_c:
                     background = pygame.Surface((350, 350))
                     background.fill((255, 255, 255))
+                    pygame.draw.rect(screen, (255, 255, 255), (0, 360, 710, 90))
+                    background2.fill((255, 255, 255))
+                    screen.blit(background2, (360, 0))
                 if event.key == pygame.K_t:
                     for iteration in range(0, 1000):
                         for i in range(len(list1)):

@@ -29,17 +29,13 @@ class NeuralNetwork():
 
     def calculate_results(self):
         greater = 0
-        greater2 = 0
         index = 0
-        index2 = 0
         for i, val in enumerate(self.output_layer):
             if val > greater:
-                greater2 = greater
-                index2 = index
                 greater = val
                 index = i
 
-        return self.results[index], self.results[index2]
+        return self.results[index], greater
 
     #  Jonathan: Made some changes, somethings weren't necessary.
     def variable_initialization(self):
@@ -70,8 +66,8 @@ class NeuralNetwork():
         if Tphase:
             self.back_propagation()
         else:
-            a, b = self.calculate_results()
-            print "Primero: ", a, "Segundo: ", b
+            r, p = self.calculate_results()
+            print "Letra: ", r, " porcentaje: ", p
 
 
 #  BackPropagation, IT WORKS, I guess
