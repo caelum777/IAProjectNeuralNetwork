@@ -107,20 +107,20 @@ def main():
     screen = pygame.display.set_mode((710, 550))
     pygame.display.set_caption("Handwriting recognition")
 
-    background = pygame.Surface((350, 350))
-    background.fill((255, 255, 255))
+    bkgnd_draw = pygame.Surface((350, 350))
+    bkgnd_draw.fill((255, 255, 255))
     background2 = pygame.Surface((350, 350))
     background2.fill((255, 255, 255))
     screen.blit(background2, (360, 0))
-    pygame.draw.rect(screen, (255, 255, 255), (0, 360, 710, 90))
     pygame.draw.rect(screen, (255, 255, 255), (0, 460, 710, 80))
+    pygame.draw.rect(screen, (255, 255, 255), (0, 360, 710, 90))
     conFont = pygame.font.SysFont("Verdana", 14)
     screen.blit(conFont.render("Controles: T\Entrenar A\Predecir C\Limpiar Pantalla Click Derecho\Dibujar Click Izquierdo\Borrar", 1, (0, 0, 0)), (4, 485))
 
     clock = pygame.time.Clock()
     keepGoing = True
     lineStart = (0, 0)
-    drawColor = (0, 0, 0)
+    drawColor = (30, 50, 90)
     lineWidth = 22
     pygame.display.update()
 
@@ -132,14 +132,14 @@ def main():
             elif event.type == pygame.MOUSEMOTION:
                 lineEnd = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed() == (1, 0, 0):
-                    pygame.draw.circle(background, drawColor, lineStart, lineWidth, 0)
+                    pygame.draw.circle(bkgnd_draw, drawColor, lineStart, lineWidth, 0)
                 if pygame.mouse.get_pressed() == (0, 0, 1):
-                    pygame.draw.circle(background, (255, 255, 255), lineStart, lineWidth, 0)
+                    pygame.draw.circle(bkgnd_draw, (255, 255, 255), lineStart, lineWidth, 0)
 
                 lineStart = lineEnd
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
-                    data = pygame.image.tostring(background, 'RGB')
+                    data = pygame.image.tostring(bkgnd_draw, 'RGB')
                     img = Image.fromstring('RGB', (350, 350), data)
                     list = Process_image(img)
                     net.feed_forward(list, False)
@@ -153,8 +153,8 @@ def main():
                     screen.blit(myFont.render("Letra: %s" % r, 1, (0, 0, 0)), (290, 380))
                     screen.blit(myFont.render("Accuracy: %s" % str(round(p, 4))+"%", 1, (0, 0, 0)), (200, 410))
                 if event.key == pygame.K_c:
-                    background = pygame.Surface((350, 350))
-                    background.fill((255, 255, 255))
+                    bkgnd_draw = pygame.Surface((350, 350))
+                    bkgnd_draw.fill((255, 255, 255))
                     pygame.draw.rect(screen, (255, 255, 255), (0, 360, 710, 90))
                     background2.fill((255, 255, 255))
                     screen.blit(background2, (360, 0))
@@ -171,8 +171,9 @@ def main():
                     save_list(net.W2, "Weights\W2.w")
                 if event.key == pygame.K_p:
                     read_5x5_images()
-        screen.blit(background, (0, 0))
+        screen.blit(bkgnd_draw, (0, 0))
         pygame.display.flip()
+        #return pygame
 
 
 def crop_resize(net):
