@@ -1,4 +1,4 @@
-__author__ = 'Pablo'
+__author__ = 'Lesmed'
 import numpy as np
 
 class NeuralNetwork():
