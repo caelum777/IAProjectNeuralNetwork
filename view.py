@@ -4,6 +4,7 @@ from Models import neural_network as neu_net
 import pickle as pck
 from os.path import abspath, exists
 import glob
+import tkMessageBox
 
 net = neu_net.NeuralNetwork()
 bkgnd_draw = pygame.Surface((350, 350))
@@ -294,6 +295,9 @@ def predict_image(bkgnd_draw, net):
     myFont = pygame.font.SysFont("Verdana", 24)
     screen.blit(myFont.render("Caracter: %s" % r, 1, (0, 0, 0)), (290, 380))
     screen.blit(myFont.render("Precision: %s" % str(round(p, 4))+"%", 1, (0, 0, 0)), (200, 410))
+    tkMessageBox.showinfo("Resultados", "Caracter: " + str(r) + " Precision: " + str(p) )
+
+
 
 
 
