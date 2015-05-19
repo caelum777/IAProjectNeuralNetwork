@@ -52,8 +52,10 @@ class NeuralNetwork():
     def feed_forward(self, input, Tphase):
         self.hidden_layer = []
         self.output_layer = []
+        #print "len inputs x : ", (self.hidden_layer_neurons)
         for x in range(0, self.hidden_layer_neurons):
             hidden_input = 0
+            #print "len inputs y : ", len(input)
             for y in range(0, len(input)):
                 hidden_input += self.W1[x][y] * input[y]
             self.hidden_layer.append(self.sigmoid(hidden_input))
