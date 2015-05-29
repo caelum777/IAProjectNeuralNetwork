@@ -11,12 +11,33 @@ bkgnd_draw = pygame.Surface((350, 350))
 def Process_image(image):
     row = image.size[0]
     col = image.size[1]
-    #t=top r=right b=bottom l=left
+
+    pixels = image.load()
+    box = define_box(pixels,row, col)
+
+    img = image.crop(box)
+    img = img.resize((5, 5), Image.ANTIALIAS)
+    pixels = img.load()
+    list = []
+    for i in range(img.size[0]):
+        for j in range(img.size[1]):
+            r = pixels[j, i][0]
+            g = pixels[j, i][1]
+            b = pixels[j, i][2]
+            if(((r+g+b)/3)>200):
+                list.append(1)
+                pixels[j,i] = (255,255,255)
+            elif(((r+g+b)/3)<=200):
+                list.append(0)
+                pixels[j,i] = (0,0,0)
+
+    img.save("image.png", 'PNG')
+    return list
+
+
+def define_box(pixels,row, col):
     to = ri = bo = le = 0
     flag = 0
-    pixels = image.load()
-    #/top edge/
-
     for x in range(row):
         for y in range(col):
             r = pixels[x, y][0]
@@ -72,24 +93,10 @@ def Process_image(image):
             flag = 0
             break
     box = (to, le, bo, ri)
-    img = image.crop(box)
-    img = img.resize((5, 5), Image.ANTIALIAS)
-    pixels = img.load()
-    list = []
-    for i in range(img.size[0]):
-        for j in range(img.size[1]):
-            r = pixels[j, i][0]
-            g = pixels[j, i][1]
-            b = pixels[j, i][2]
-            if(((r+g+b)/3)>200):
-                list.append(1)
-                pixels[j,i] = (255,255,255)
-            elif(((r+g+b)/3)<=200):
-                list.append(0)
-                pixels[j,i] = (0,0,0)
+    return box
 
-    img.save("image.png", 'PNG')
-    return list
+
+
 
 def view_initialization():
     list1 = read_list("Images\.imgs5x5")
